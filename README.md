@@ -2,7 +2,7 @@
 
 > **Extract text from screenshots and photos. Free. No upload. No signup. No server.**
 
-🌐 Live: [imagetotextocr.vercel.app](https://imagetotextocr.vercel.app)
+🌐 Live: [imagetotextocr-phi.vercel.app](https://imagetotextocr-phi.vercel.app)
 
 ---
 
