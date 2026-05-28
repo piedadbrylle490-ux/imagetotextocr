@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OCR Tool That Doesn't Upload Your Files — Privacy-First Image to Text</title>
+  <meta name="description" content="Most OCR tools send your images to unknown servers. This one doesn't. See exactly how browser-based OCR keeps your documents private — free, no signup." />
+  <link rel="canonical" href="https://imagetotextocr.vercel.app/blog/ocr-privacy-no-upload" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">screenshot<span>totext</span></a>
+  <div class="nav-links">
+    <a href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener" class="btn-coffee">☕ Buy me a coffee</a>
+  </div>
+</nav>
+
+<header class="blog-hero">
+  <p class="blog-meta">Privacy · 5 min read</p>
+  <h1>Why most OCR tools are a privacy risk — and how to avoid it</h1>
+  <p style="font-size:16px;color:var(--ink-2);margin-top:12px;line-height:1.7;">
+    Before you upload a photo of your tax form, receipt, or ID card to an online OCR tool, read this.
+  </p>
+</header>
+
+<article class="blog-body">
+
+  <h2>What happens when you upload to a typical OCR site</h2>
+  <p>
+    The workflow of nearly every popular online OCR tool looks like this:
+  </p>
+  <ol>
+    <li>You upload your image.</li>
+    <li>The image travels over the internet to the tool's server.</li>
+    <li>The server runs OCR software on it.</li>
+    <li>The extracted text is sent back to your browser.</li>
+    <li>Your image — and possibly the extracted text — may be stored on their server, sometimes for days or permanently.</li>
+  </ol>
+  <p>
+    Most privacy policies for these tools contain language like "we may retain uploaded content for service improvement."
+    For a photo of a birthday cake, that's fine. For a photo of your passport, tax return, bank statement,
+    or private message — it's a serious risk.
+  </p>
+
+  <h2>The privacy-safe alternative: browser-based OCR</h2>
+  <p>
+    WebAssembly (WASM) has changed what's possible in a browser. It allows complex software that previously
+    required a server — compilers, video editors, image processors — to run entirely inside your browser tab.
+    Tesseract.js is a full OCR engine compiled to WebAssembly.
+  </p>
+  <p>
+    When you use imagetotextocr.vercel.app, this is what actually happens:
+  </p>
+  <ol>
+    <li>You select an image from your device.</li>
+    <li>The file is read by JavaScript running in your browser tab (not sent anywhere).</li>
+    <li>Tesseract.js — already loaded in your browser — processes the image locally.</li>
+    <li>The text is displayed in your browser.</li>
+    <li>No image data ever leaves your device.</li>
+  </ol>
+
+  <h2>How to verify this yourself</h2>
+  <p>
+    You don't have to take our word for it. Open the tool, then open your browser's Developer Tools
+    (right-click → Inspect → Network tab). Select an image and click Extract Text.
+    Watch the Network tab — you'll see the Tesseract language file load (that's normal, it's the OCR model),
+    but you will see zero requests that upload your image data.
+  </p>
+
+  <div class="blog-cta">
+    <p>Try it — your documents stay on your device</p>
+    <a href="/">Open the private OCR tool →</a>
+  </div>
+
+  <h2>When does this matter most?</h2>
+  <ul>
+    <li><strong>Passport and ID photos</strong> — OCR on travel documents is common for visa applications. Never upload these to unknown servers.</li>
+    <li><strong>Tax documents and financial records</strong> — receipts, invoices, bank statements contain personal financial data.</li>
+    <li><strong>Medical documents</strong> — prescriptions, test results, insurance letters.</li>
+    <li><strong>Personal messages</strong> — screenshots of private conversations.</li>
+    <li><strong>Business documents</strong> — contracts, NDAs, internal reports.</li>
+  </ul>
+
+  <h2>The open source transparency guarantee</h2>
+  <p>
+    This tool is fully open source. The source code is available on GitHub for anyone to audit.
+    The privacy guarantee isn't a claim in a terms of service — it's verifiable in the code itself.
+    There are no upload calls. Period.
+  </p>
+
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">screenshot<span>totext</span></div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="/">Free OCR Tool</a>
+      <a href="/blog/how-to-copy-text-from-screenshot">How to use</a>
+      <a href="/blog/extract-text-from-receipt">Receipt OCR</a>
+    </nav>
+    <p class="footer-copy">Free forever · No upload · Made in the Philippines 🇵🇭</p>
+  </div>
+</footer>
+</body>
+</html>

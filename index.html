@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screenshot to Text — Free OCR. No Upload. No Signup.</title>
+  <meta name="description" content="Extract text from any screenshot, photo, or image instantly. Works 100% in your browser — your files never leave your device. Free, no signup required." />
+  <meta name="keywords" content="image to text, screenshot to text, OCR online free, photo to text, extract text from image, copy text from screenshot, picture to text converter, no upload OCR" />
+  <link rel="canonical" href="https://imagetotextocr.vercel.app/" />
+  <meta property="og:title" content="Image to Text OCR — Free OCR. No Upload." />
+  <meta property="og:description" content="Extract text from any image instantly. Runs in your browser. Zero uploads, zero signup." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://imagetotextocr.vercel.app/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Image to Text OCR",
+    "url": "https://imagetotextocr.vercel.app/",
+    "description": "Free browser-based OCR tool. Extract text from screenshots and images without uploading files.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">screenshot<span>totext</span></a>
+  <div class="nav-links">
+    <a href="/blog/how-to-copy-text-from-screenshot">How it works</a>
+    <a href="/blog/ocr-privacy-no-upload">Privacy</a>
+    <a href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener" class="btn-coffee">☕ Buy me a coffee</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="trust-badge">
+    <span class="dot"></span>
+    Files never leave your device · Powered by Tesseract.js (WASM)
+  </div>
+  <h1>Extract text from<br /><em>any screenshot or photo</em></h1>
+  <p class="hero-sub">
+    Drop an image — get the text back instantly. Works offline in your browser.
+    No account, no upload, no nonsense.
+  </p>
+</header>
+
+<main>
+  <div class="converter-box">
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Drop images here or click to select">
+      <div class="drop-icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="6" y="6" width="36" height="36" rx="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M24 16v12M18 22l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="12" y="30" width="24" height="3" rx="1.5" fill="currentColor" opacity="0.3"/>
+        </svg>
+      </div>
+      <p class="drop-primary">Drop your image here</p>
+      <p class="drop-secondary">PNG, JPG, JPEG, WEBP, BMP, GIF — or <label for="fileInput" class="file-label">browse files</label></p>
+      <input type="file" id="fileInput" accept="image/*" multiple hidden />
+      <p class="drop-hint">Screenshots · Receipts · Textbook photos · Handwriting · Signs</p>
+    </div>
+
+    <div class="lang-row" id="langRow" style="display:none;">
+      <label for="langSelect">Language in image:</label>
+      <select id="langSelect">
+        <option value="eng" selected>English</option>
+        <option value="chi_sim">Chinese (Simplified)</option>
+        <option value="chi_tra">Chinese (Traditional)</option>
+        <option value="spa">Spanish</option>
+        <option value="fra">French</option>
+        <option value="deu">German</option>
+        <option value="por">Portuguese</option>
+        <option value="jpn">Japanese</option>
+        <option value="kor">Korean</option>
+        <option value="ara">Arabic</option>
+        <option value="hin">Hindi</option>
+        <option value="rus">Russian</option>
+        <option value="tha">Thai</option>
+        <option value="vie">Vietnamese</option>
+        <option value="fil">Filipino</option>
+      </select>
+    </div>
+
+    <div class="file-queue" id="fileQueue"></div>
+
+    <div class="action-row" id="actionRow" style="display:none;">
+      <button class="btn-convert" id="extractBtn">Extract Text</button>
+      <button class="btn-clear" id="clearBtn">Clear</button>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap" style="display:none;">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-label" id="progressLabel">Starting…</p>
+    </div>
+
+    <div class="results-wrap" id="resultsWrap" style="display:none;">
+      <div class="results-header">
+        <span class="results-title" id="resultsTitle"></span>
+        <button class="btn-copy-all" id="copyAllBtn">Copy all text</button>
+      </div>
+
+      <div class="text-output-wrap">
+        <textarea class="text-output" id="textOutput" readonly placeholder="Extracted text will appear here…"></textarea>
+        <div class="text-output-actions">
+          <button class="btn-action-sm" id="copyTextBtn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M3 11H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Copy
+          </button>
+          <button class="btn-action-sm" id="downloadTxtBtn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Download .txt
+          </button>
+        </div>
+      </div>
+
+      <div class="results-list" id="resultsList"></div>
+
+      <button class="btn-convert-more" id="extractMoreBtn">Extract from more images</button>
+    </div>
+
+  </div>
+
+  <div class="trust-strip">
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">🔒</span>
+      <strong>Zero uploads</strong>
+      <p>Your images are processed in your browser using WebAssembly. Nothing is sent to any server — ever.</p>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">⚡</span>
+      <strong>Instant results</strong>
+      <p>No queue, no wait. Tesseract.js decodes your image locally in seconds — even offline.</p>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">🌐</span>
+      <strong>100+ languages</strong>
+      <p>English, Filipino, Chinese, Spanish, Arabic, Japanese and more. Select your language before extracting.</p>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">💸</span>
+      <strong>Forever free</strong>
+      <p>No account, no credit card, no "free trial". The core tool is free — always. You can buy me coffee if it helps.</p>
+    </div>
+  </div>
+
+  <section class="how-section">
+    <h2>How it works</h2>
+    <p>
+      Most OCR tools upload your image to a server, run the recognition there, then send the result back.
+      That means your receipts, ID photos, handwritten notes, and private screenshots travel across the internet
+      to someone else's computer. This tool never does that.
+    </p>
+    <p>
+      <strong>Tesseract.js</strong> is a WebAssembly build of the open-source Tesseract OCR engine — the same
+      engine used in Google Docs. It runs entirely inside your browser tab. Your image data never touches
+      a network request.
+    </p>
+
+    <div class="code-proof">
+      <p class="code-proof-label">// proof — open DevTools → Network tab while extracting</p>
+      <code>// You will see ZERO image upload requests.
+            // Tesseract.js loads once (the WASM engine), then
+            // all OCR happens locally in your browser memory.
+
+            const result = await Tesseract.recognize(imageFile, 'eng');
+            console.log(result.data.text); // ← your text, never left your device</code>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <h2>Frequently asked questions</h2>
+
+    <details>
+      <summary>What types of images give the best results?</summary>
+      <p>Clear, high-contrast images work best — screenshots of documents, PDFs, typed receipts, printed signs, and book pages. Handwriting is supported but accuracy depends on legibility. Blurry or very low-resolution images will produce poor results; try increasing the zoom or taking a sharper photo.</p>
+    </details>
+
+    <details>
+      <summary>Is this really free? No hidden limits?</summary>
+      <p>Yes. The core tool — single image OCR in any supported language — is completely free, no account required. If you find it useful, there's a "Buy me a coffee" button that directly supports development (I'm a solo developer from the Philippines). Batch processing of many images at once may become a paid premium feature in the future, but single-image extraction will always be free.</p>
+    </details>
+
+    <details>
+      <summary>Can I extract text from a photo of a receipt or ID document?</summary>
+      <p>Yes — and this is exactly the use case this tool was built for. Because your files never leave your browser, you can safely process sensitive documents like tax forms, receipts, ID cards, and personal letters without worrying about them being stored on an unknown server.</p>
+    </details>
+
+    <details>
+      <summary>Why is the first extraction slower than later ones?</summary>
+      <p>Tesseract.js downloads its language data file the first time you use a language (typically 1–4 MB). After that, it's cached in your browser and subsequent extractions are much faster. This is the only network request the tool ever makes — and it's just loading the language model, not your image.</p>
+    </details>
+
+    <details>
+      <summary>Does it work on mobile?</summary>
+      <p>Yes. You can upload images from your phone's camera roll or take a photo directly. The tool works in Chrome, Safari, Firefox, and Edge on both iOS and Android. Results may vary on very old or low-RAM devices since the OCR engine runs locally and needs some memory.</p>
+    </details>
+
+    <details>
+      <summary>What languages are supported?</summary>
+      <p>Over 100 languages via Tesseract.js, including English, Filipino (Tagalog), Chinese (Simplified and Traditional), Spanish, French, German, Portuguese, Japanese, Korean, Arabic, Hindi, Russian, Thai, and Vietnamese. Select your language from the dropdown before clicking "Extract Text".</p>
+    </details>
+
+    <details>
+      <summary>Is the source code available?</summary>
+      <p>Yes — this project is fully open source. You can review, fork, or contribute on GitHub. The privacy guarantees aren't just a claim; you can read the code and verify that there are no upload calls.</p>
+    </details>
+  </section>
+
+  <section class="how-section">
+    <h2>What people use it for</h2>
+    <p>
+      <strong>Students</strong> — copy quotes from textbook photos without retyping.<br/>
+      <strong>Online sellers</strong> — extract product descriptions from supplier screenshots.<br/>
+      <strong>Professionals</strong> — digitize printed documents, business cards, or meeting whiteboards.<br/>
+      <strong>Anyone</strong> — copy text from a screenshot when you can't select it directly.
+    </p>
+  </section>
+
+  <div class="coffee-section">
+    <div class="coffee-card">
+      <div class="coffee-emoji" aria-hidden="true">☕</div>
+      <h3>This tool saved you some time?</h3>
+      <h4>Built by one person, for free.</h4>
+      <p>
+        No investors. No ad network. No data harvesting. Just a tool that does one job honestly. If it saved you time or frustration,
+        a coffee keeps the servers on and motivates the next tool.
+      </p>
+      <a href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener" class="btn-coffee-big">
+        Buy me a coffee ☕
+      </a>
+      <p class="coffee-sub">Ko-fi · One-time · No account needed</p>
+    </div>
+  </div>
+
+  <section class="sister-projects">
+    <h2>Other free tools by the same creator</h2>
+    <p class="sister-projects-desc">A suite of privacy-first tools — all free, all open source, all free from uploads and signups.</p>
+    <div class="projects-grid">
+      <a href="https://heicfree.vercel.app/" target="_blank" rel="noopener" class="project-card">
+        <div class="project-info">
+          <h3>HEICfree</h3>
+          <p>Convert HEIC to JPG — no upload, no signup</p>
+        </div>
+      </a>
+      <a href="https://piclight.vercel.app/" target="_blank" rel="noopener" class="project-card">
+        <div class="project-info">
+          <h3>PicLight</h3>
+          <p>Compress images for WhatsApp & email — no upload, no signup</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">screenshot<span>totext</span></div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="/blog/how-to-copy-text-from-screenshot">How to copy text</a>
+      <a href="/blog/ocr-privacy-no-upload">Privacy guide</a>
+      <a href="/blog/extract-text-from-receipt">Receipt OCR</a>
+      <a href="/blog/screenshot-to-text-no-signup">No signup tools</a>
+      <a href="/blog/image-to-text-converter">Image to text</a>
+      <a href="https://github.com/YOUR_GITHUB/screenshottotext" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <p class="footer-copy">
+      Built with Tesseract.js — your files never leave your browser.<br />
+      Free forever · Open source · Made in the Philippines 🇵🇭
+    </p>
+  </div>
+</footer>
+
+<script src="js/ui.js"></script>
+<script src="js/ocr.js"></script>
+</body>
+</html>
