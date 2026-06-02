@@ -2,7 +2,7 @@
 
 > **Extract text from screenshots and photos. Free. No upload. No signup. No server.**
 
-🌐 Live: [imagetotextocr-phi.vercel.app](https://imagetotextocr-phi.vercel.app)
+🌐 Live: [imagetotextocr-phi.pages.dev](https://imagetotextocr-phi.pages.dev)
 
 ---
 
@@ -65,7 +65,7 @@ URL.revokeObjectURL(imageUrl);
 | Layer | Technology | Cost |
 |-------|-----------|------|
 | OCR engine | [Tesseract.js](https://github.com/naptha/tesseract.js) v5 (WASM) | Free / MIT |
-| Hosting | [Vercel](https://vercel.com) free tier | $0 |
+| Hosting | [Cloudflare Pages](https://pages.cloudflare.com) free tier | $0 |
 | Frontend | Vanilla HTML + CSS + JS | $0 |
 | Fonts | Google Fonts (DM Sans, DM Mono) | $0 |
 | **Total** | | **$0/month** |
@@ -91,7 +91,8 @@ imagetotextocr/
 │   ├── extract-text-from-receipt.html
 │   └── ocr-privacy-no-upload.html
 ├── sitemap.xml
-├── vercel.json
+├── _headers
+├── _redirects
 ├── robots.txt
 └── README.md
 ```
@@ -117,14 +118,15 @@ npx serve .
 
 ---
 
-## Deploy to Vercel
+## Deploy to Cloudflare Pages
 
-```bash
-npm i -g vercel
-vercel
-```
+Connect the GitHub repo to Cloudflare Pages and use these settings:
 
-Or connect the GitHub repo to Vercel via the dashboard for automatic deploys on every push.
+- Build command: none
+- Build output directory: `/`
+- Framework preset: none
+
+Cloudflare Pages will deploy the static files directly from the repository.
 
 ---
 

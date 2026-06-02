@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://imagetotextocr-phi.vercel.app/sitemap.xml
+Sitemap: https://imagetotextocr-phi.pages.dev/sitemap.xml
