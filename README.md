@@ -2,7 +2,7 @@
 
 > **Extract text from screenshots and photos. Free. No upload. No signup. No server.**
 
-🌐 Live: [imagetotextocr-phi.pages.dev](https://imagetotextocr-phi.pages.dev)
+🌐 Live: [imagetotextocr.pages.dev](https://imagetotextocr.pages.dev)
 
 ---
 
